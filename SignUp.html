@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BudgetTrack Create Account</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    @keyframes blob {
+      0%, 100% {
+        transform: translate(0px, 0px) scale(1);
+      }
+      33% {
+        transform: translate(30px, -50px) scale(1.1);
+      }
+      66% {
+        transform: translate(-20px, 20px) scale(0.9);
+      }
+    }
+    .animate-blob {
+      animation: blob 7s infinite;
+    }
+    .animation-delay-2000 {
+      animation-delay: 2s;
+    }
+    .animation-delay-4000 {
+      animation-delay: 4s;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center p-6 bg-gradient-to-r from-[#0a0a2a] to-[#2e3adf] min-h-screen">
+  <div class="relative max-w-md w-full bg-white bg-opacity-90 rounded-2xl shadow-2xl p-8 sm:p-10 overflow-hidden">
+    <!-- Background decorative circles -->
+    <div aria-hidden="true" class="absolute -top-16 -left-16 w-48 h-48 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+    <div aria-hidden="true" class="absolute -bottom-20 -right-20 w-72 h-72 bg-indigo-400 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-2000"></div>
+    <div aria-hidden="true" class="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+
+    <div class="relative z-10 text-center mb-6">
+      <div class="inline-flex items-center justify-center text-blue-600 font-extrabold text-2xl sm:text-3xl mb-1 select-none">
+        <i class="fas fa-file-invoice-dollar mr-3"></i>
+        <span>BudgetTrack</span>
+      </div>
+      <p class="text-gray-700 text-base sm:text-lg font-medium tracking-wide">
+        Take control of your finances today
+      </p>
+    </div>
+
+    <h2 class="relative z-10 font-extrabold text-gray-900 text-xl sm:text-2xl mb-6 select-none">
+      Create a New Account
+    </h2>
+
+    <form class="relative z-10" novalidate>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+        <div>
+          <label for="firstname" class="block text-sm font-semibold text-gray-900 mb-2 select-none">First Name</label>
+          <input
+            id="firstname"
+            type="text"
+            placeholder="Enter your first name"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-transparent transition"
+            required
+          />
+        </div>
+        <div>
+          <label for="lastname" class="block text-sm font-semibold text-gray-900 mb-2 select-none">Last Name</label>
+          <input
+            id="lastname"
+            type="text"
+            placeholder="Enter your last name"
+            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-transparent transition"
+            required
+          />
+        </div>
+      </div>
+
+      <label for="contact" class="block text-sm font-semibold text-gray-900 mb-2 select-none">Contact Number</label>
+      <input
+        id="contact"
+        type="tel"
+        placeholder="Enter your contact number"
+        class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-5 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-transparent transition"
+        required
+      />
+
+      <label for="email" class="block text-sm font-semibold text-gray-900 mb-2 select-none">Email Address</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="Enter your email"
+        class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-5 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-transparent transition"
+        required
+      />
+
+      <label for="password" class="block text-sm font-semibold text-gray-900 mb-2 select-none">Password</label>
+      <input
+        id="password"
+        type="password"
+        placeholder="Create a password"
+        class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-5 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-transparent transition"
+        required
+      />
+
+      <label for="confirm-password" class="block text-sm font-semibold text-gray-900 mb-2 select-none">Confirm Password</label>
+      <input
+        id="confirm-password"
+        type="password"
+        placeholder="Confirm your password"
+        class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-5 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-400 focus:border-transparent transition"
+        required
+      />
+
+      <div class="flex items-center mb-6 text-sm select-none">
+        <input id="agree" type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-400" />
+        <label for="agree" class="ml-3 font-semibold text-gray-900 cursor-pointer select-none">
+          I agree to the
+          <a href="#" class="text-blue-600 hover:underline">Terms of Service</a> and
+          <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 rounded-lg shadow-lg transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500"
+      >
+        Create Account
+      </button>
+
+      <div class="flex items-center my-7">
+        <hr class="flex-grow border-gray-300" />
+        <span class="mx-4 text-gray-400 font-semibold select-none">or</span>
+        <hr class="flex-grow border-gray-300" />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <button
+          type="button"
+          class="border border-gray-300 rounded-lg py-3 flex items-center justify-center space-x-3 hover:bg-gray-100 transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <span class="text-xs font-bold select-none">G</span>
+          <span class="select-none">Google</span>
+        </button>
+        <button
+          type="button"
+          class="border border-gray-300 rounded-lg py-3 flex items-center justify-center space-x-3 hover:bg-gray-100 transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <span class="text-xs font-bold select-none">f</span>
+          <span class="select-none">Facebook</span>
+        </button>
+      </div>
+
+      <p class="mt-8 text-center text-gray-700 text-sm select-none">
+        Already have an account?
+        <a href="index.html" class="text-blue-600 font-semibold hover:underline">Log in</a>
+      </p>
+    </form>
+  </div>
+</body>
+</html>

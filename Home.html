@@ -1,0 +1,141 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   BudgetTrack Home
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Scrollbar for sidebar */
+    aside::-webkit-scrollbar {
+      width: 6px;
+    }
+    aside::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.1);
+      border-radius: 3px;
+    }
+  </style>
+ </head>
+ <body class="min-h-screen flex flex-col md:flex-row bg-gradient-to-r from-[#0a0a2a] to-[#2e3adf] text-gray-900">
+  <aside class="flex flex-row md:flex-col justify-between w-full md:w-64 border-b md:border-r border-gray-300 bg-[#d1d1d1] overflow-y-auto md:overflow-y-auto">
+   <div>
+    <a class="flex items-center gap-3 px-6 py-4 md:py-8 text-blue-700 font-extrabold text-lg md:text-xl tracking-wide hover:text-blue-800 transition" href="Home.html">
+     <i class="fas fa-file-invoice-dollar text-lg md:text-2xl">
+     </i>
+     <span>
+      BudgetTrack
+     </span>
+    </a>
+    <nav class="flex flex-row md:flex-col space-x-4 md:space-x-0 md:space-y-2 px-4 md:px-6 overflow-x-auto md:overflow-x-visible">
+     <a class="flex items-center gap-2 md:gap-4 px-3 md:px-5 py-2 md:py-3 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-md shadow-blue-200 hover:bg-blue-200 transition whitespace-nowrap" href="Home.html">
+      <i class="fas fa-home text-base md:text-lg">
+      </i>
+      Home
+     </a>
+     <a class="flex items-center gap-2 md:gap-4 px-3 md:px-5 py-2 md:py-3 rounded-lg hover:bg-gray-300 text-gray-700 text-sm md:text-base font-medium transition whitespace-nowrap" href="Dashboard.html">
+      <i class="fas fa-th-large text-base md:text-lg">
+      </i>
+      Dashboard
+     </a>
+     <a class="flex items-center gap-2 md:gap-4 px-3 md:px-5 py-2 md:py-3 rounded-lg hover:bg-gray-300 text-gray-700 text-sm md:text-base font-medium transition whitespace-nowrap" href="Transactions.html">
+      <i class="fas fa-user-friends text-base md:text-lg">
+      </i>
+      Transactions
+     </a>
+     <a class="flex items-center gap-2 md:gap-4 px-3 md:px-5 py-2 md:py-3 rounded-lg hover:bg-gray-300 text-gray-700 text-sm md:text-base font-medium transition whitespace-nowrap" href="Settings.html">
+      <i class="fas fa-cog text-base md:text-lg">
+      </i>
+      Settings
+     </a>
+    </nav>
+   </div>
+   <div class="border-t md:border-t-0 md:border-gray-300">
+    <div class="flex items-center gap-4 px-6 py-4 md:py-6">
+     <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white text-sm font-bold select-none">
+      JO
+     </div>
+     <div class="text-xs md:text-sm">
+      <p class="font-semibold text-gray-900 leading-none">
+       Jonathan Osuna
+      </p>
+     </div>
+    </div>
+    <button class="w-full flex items-center gap-3 px-6 py-4 text-gray-700 text-sm font-semibold hover:bg-gray-300 border-t border-gray-300 transition" id="logoutButton" type="button">
+     <i class="fas fa-sign-out-alt text-base">
+     </i>
+     Log Out
+    </button>
+   </div>
+  </aside>
+  <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+   <h1 class="text-white font-semibold text-xl md:text-2xl mb-8 md:mb-10 select-none">
+    Home
+   </h1>
+   <section class="mt-16">
+    <section class="bg-white rounded-xl p-8 mb-10 shadow-lg max-w-7xl mx-auto">
+     <p class="text-center text-sm font-semibold text-[#3b44d6] mb-6 tracking-wide">
+      QUICK ACCESS
+     </p>
+     <div class="flex justify-center gap-10 flex-wrap">
+      <button class="bg-[#d3d7db] rounded-xl w-44 h-32 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow" type="button">
+       <i class="fas fa-plus text-4xl mb-3">
+       </i>
+       <span class="font-semibold text-black">
+        New Expense
+       </span>
+      </button>
+      <button class="bg-[#d3d7db] rounded-xl w-44 h-32 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow" type="button">
+       <i class="fas fa-bookmark text-4xl mb-3">
+       </i>
+       <span class="font-semibold text-black">
+        Saved
+       </span>
+      </button>
+      <button class="bg-[#d3d7db] rounded-xl w-44 h-32 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow" type="button">
+       <i class="fas fa-edit text-4xl mb-3">
+       </i>
+       <span class="font-semibold text-black">
+        Draft
+       </span>
+      </button>
+     </div>
+    </section>
+    <section class="max-w-7xl mx-auto">
+     <div class="flex justify-between items-center border-b border-white/30 pb-3 mb-6">
+      <h2 class="text-xl font-bold text-white select-none">
+       Recent
+      </h2>
+      <button aria-label="Sort by Last Viewed" class="text-sm font-normal flex items-center gap-1 text-white/90 hover:text-white focus:outline-none" type="button">
+       Last Viewed
+       <i class="fas fa-chevron-down text-xs">
+       </i>
+      </button>
+     </div>
+     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div class="rounded-xl overflow-hidden bg-white shadow-lg aspect-[4/2.3]">
+       <img alt="Abstract gray shapes on white background, modern art style" class="w-full h-full object-cover" height="230" src="https://storage.googleapis.com/a1aa/image/9cb598a3-feda-441a-9360-d0c773e5c7e4.jpg" width="400"/>
+      </div>
+      <div class="rounded-xl overflow-hidden bg-white shadow-lg aspect-[4/2.3]">
+       <img alt="Abstract gray shapes on white background, modern art style" class="w-full h-full object-cover" height="230" src="https://storage.googleapis.com/a1aa/image/9cb598a3-feda-441a-9360-d0c773e5c7e4.jpg" width="400"/>
+      </div>
+      <div class="rounded-xl overflow-hidden bg-white shadow-lg aspect-[4/2.3]">
+       <img alt="Abstract gray shapes on white background, modern art style" class="w-full h-full object-cover" height="230" src="https://storage.googleapis.com/a1aa/image/9cb598a3-feda-441a-9360-d0c773e5c7e4.jpg" width="400"/>
+      </div>
+     </div>
+    </section>
+   </section>
+  </main>
+  <script>
+   document.getElementById('logoutButton').addEventListener('click', function() {
+      window.location.href = 'index.html';
+    });
+  </script>
+ </body>
+</html>
