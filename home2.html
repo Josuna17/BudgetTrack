@@ -1,0 +1,628 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   BudgetTrack Home
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Scrollbar for sidebar */
+    aside::-webkit-scrollbar {
+      width: 6px;
+    }
+    aside::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.1);
+      border-radius: 3px;
+    }
+    
+    /* Mobile sidebar transition */
+    @media (max-width: 768px) {
+      .sidebar-mobile {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-mobile.active {
+        transform: translateX(0);
+      }
+      .overlay {
+        transition: opacity 0.3s ease-in-out;
+      }
+    }
+
+    /* Transaction card hover effects */
+    .transaction-card {
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .transaction-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Welcome message animation */
+    .welcome-message {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Quick access button hover effect */
+    .quick-access-btn {
+      transition: all 0.3s ease;
+    }
+
+    .quick-access-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Modal overlay styling */
+    .modal-overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Modal animation */
+    .modal-content {
+      animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+  </style>
+ </head>
+ <body class="min-h-screen flex bg-gradient-to-r from-[#0a0a2a] to-[#2e3adf] text-gray-900">
+  
+  <!-- Mobile Menu Button -->
+  <div class="md:hidden fixed top-4 left-4 z-50">
+    <button id="menuToggle" class="bg-white/20 backdrop-blur-sm text-white p-3 rounded-lg shadow-lg hover:bg-white/30 transition-all">
+      <i class="fas fa-bars text-lg"></i>
+    </button>
+  </div>
+
+  <!-- Mobile Overlay -->
+  <div id="overlay" class="md:hidden fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none overlay"></div>
+
+  <!-- Logout Confirmation Modal -->
+  <div id="logoutModal" class="fixed inset-0 modal-overlay z-[100] hidden items-center justify-center">
+    <div class="modal-content fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
+      <div class="text-center">
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-6">
+          <i class="fas fa-sign-out-alt text-red-600 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Confirm Logout</h3>
+        <p class="text-gray-600 mb-8">Are you sure you want to log out of your account?</p>
+        <div class="flex gap-4 justify-center">
+          <button id="cancelLogout" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+            Cancel
+          </button>
+          <button id="confirmLogout" class="px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
+            <i class="fas fa-sign-out-alt mr-2"></i>
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar-mobile md:translate-x-0 fixed z-50 flex flex-col justify-between w-80 md:w-64 h-screen border-r border-gray-300 bg-[#d1d1d1] overflow-y-auto">
+   <div>
+    <a class="flex items-center gap-3 px-6 py-6 md:py-8 text-blue-700 font-extrabold text-xl tracking-wide hover:text-blue-800 transition" href="home2.html">
+     <i class="fas fa-file-invoice-dollar text-2xl">
+     </i>
+     <span>
+      BudgetTrack
+     </span>
+    </a>
+    <nav class="flex flex-col space-y-2 px-6">
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-md shadow-blue-200 hover:bg-blue-200 transition" href="home2.html">
+      <i class="fas fa-home text-lg">
+      </i>
+      <span class="text-base">Home</span>
+     </a>
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg hover:bg-gray-300 text-gray-700 font-medium transition" href="dashboard2.html">
+      <i class="fas fa-th-large text-lg">
+      </i>
+      <span class="text-base">Dashboard</span>
+     </a>
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg hover:bg-gray-300 text-gray-700 font-medium transition" href="transactions2.html">
+      <i class="fas fa-user-friends text-lg">
+      </i>
+      <span class="text-base">Transactions</span>
+     </a>
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg hover:bg-gray-300 text-gray-700 font-medium transition" href="settings2.html">
+      <i class="fas fa-cog text-lg">
+      </i>
+      <span class="text-base">Settings</span>
+     </a>
+    </nav>
+   </div>
+   
+   <div class="border-t border-gray-300 mt-4">
+    <div class="flex items-center gap-4 px-6 py-6">
+     <div id="userInitials" class="w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full font-bold text-lg"></div>
+     <div>
+       <p id="user-name" class="font-semibold text-gray-900 text-base leading-tight"></p>
+       <p class="text-sm text-gray-600">Account</p>
+     </div>
+    </div>
+    <button class="w-full flex items-center gap-3 px-6 py-4 text-gray-700 font-semibold hover:bg-gray-300 border-t border-gray-300 transition" id="logoutButton" type="button">
+     <i class="fas fa-sign-out-alt text-lg">
+     </i>
+     <span class="text-base">Log Out</span>
+    </button>
+   </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 ml-0 md:ml-64 p-6 md:p-10 overflow-y-auto">
+   <div class="pt-16 md:pt-0">
+     
+     <!-- Loading indicator -->
+     <div id="loadingIndicator" class="text-white text-center py-8">
+       <i class="fas fa-spinner fa-spin text-3xl"></i>
+       <p class="mt-3">Loading...</p>
+     </div>
+
+     <!-- Main content (initially hidden) -->
+     <div id="mainContent" class="hidden">
+       <!-- Welcome Message -->
+       <div class="welcome-message mb-8">
+         <h1 class="text-white font-semibold text-2xl md:text-3xl mb-2 select-none">
+          Welcome back, <span id="welcomeUserName" class="text-blue-300">User</span>!
+         </h1>
+         <p class="text-white/70 text-sm md:text-base">
+          Ready to manage your finances today?
+         </p>
+       </div>
+       
+       <section class="mt-8 md:mt-16">
+        <section class="bg-white rounded-xl p-6 md:p-8 mb-10 shadow-lg max-w-7xl mx-auto">
+         <p class="text-center text-sm font-semibold text-[#3b44d6] mb-6 tracking-wide">
+          QUICK ACCESS
+         </p>
+         <div class="flex justify-center">
+          <button id="newTransactionBtn" class="quick-access-btn bg-gradient-to-br from-[#3b44d6] to-[#2e3adf] text-white rounded-xl w-48 h-32 md:w-56 md:h-36 flex flex-col items-center justify-center shadow-lg hover:shadow-2xl transition-all" type="button">
+           <i class="fas fa-plus text-4xl md:text-5xl mb-3 md:mb-4">
+           </i>
+           <span class="font-semibold text-base md:text-lg">
+            Add New Transaction
+           </span>
+           <span class="text-xs md:text-sm text-white/80 mt-1">
+            Track your expenses & income
+           </span>
+          </button>
+         </div>
+        </section>
+        
+        <section class="max-w-7xl mx-auto">
+         <div class="flex justify-between items-center border-b border-white/30 pb-3 mb-6">
+          <h2 class="text-xl font-bold text-white select-none">
+           Recent Transactions
+          </h2>
+          <button aria-label="Sort by Last Viewed" class="text-sm font-normal flex items-center gap-1 text-white/90 hover:text-white focus:outline-none" type="button" id="sortButton">
+           <span id="sortLabel">Latest First</span>
+           <i class="fas fa-chevron-down text-xs">
+           </i>
+          </button>
+         </div>
+
+         <!-- No Transactions State -->
+         <div id="noTransactions" class="hidden text-center py-12">
+           <i class="fas fa-receipt text-white/50 text-4xl mb-4"></i>
+           <p class="text-white/70 text-lg">No transactions found</p>
+           <p class="text-white/50 text-sm">Your recent transactions will appear here</p>
+         </div>
+
+         <!-- Transactions Grid -->
+         <div id="transactionsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+           <!-- Transaction cards will be inserted here dynamically -->
+         </div>
+        </section>
+       </section>
+     </div>
+   </div>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBk-dE1Hk-yg6sU1uilShADBohUDPlOg2o",
+      authDomain: "budget-tracker-14.firebaseapp.com",
+      projectId: "budget-tracker-14",
+      storageBucket: "budget-tracker-14.appspot.com",
+      messagingSenderId: "213270821410",
+      appId: "1:213270821410:web:74011269ee05d2e72e687b",
+      measurementId: "G-SDLEBN6QBG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentUser = null;
+    let userData = null;
+    let transactions = [];
+    let sortOrder = 'desc'; // 'desc' for latest first, 'asc' for oldest first
+    let userCurrency = 'USD'; // Default currency
+
+    // Currency configurations
+    const currencyConfig = {
+      'USD': { locale: 'en-US', symbol: '$' },
+      'EUR': { locale: 'de-DE', symbol: '€' },
+      'GBP': { locale: 'en-GB', symbol: '£' },
+      'JPY': { locale: 'ja-JP', symbol: '¥' },
+      'PHP': { locale: 'en-PH', symbol: '₱' },
+      'CAD': { locale: 'en-CA', symbol: 'C$' },
+      'AUD': { locale: 'en-AU', symbol: 'A$' },
+      'CNY': { locale: 'zh-CN', symbol: '¥' },
+      'INR': { locale: 'en-IN', symbol: '₹' },
+      'KRW': { locale: 'ko-KR', symbol: '₩' },
+      'SGD': { locale: 'en-SG', symbol: 'S$' },
+      'THB': { locale: 'th-TH', symbol: '฿' },
+      'MXN': { locale: 'es-MX', symbol: 'MX$' },
+      'BRL': { locale: 'pt-BR', symbol: 'R$' }
+    };
+
+    // Category icons mapping
+    const categoryIcons = {
+      'food': 'fas fa-utensils',
+      'transportation': 'fas fa-car',
+      'entertainment': 'fas fa-film',
+      'shopping': 'fas fa-shopping-bag',
+      'bills-utilities': 'fas fa-bolt',
+      'healthcare': 'fas fa-heartbeat',
+      'education': 'fas fa-graduation-cap',
+      'travel': 'fas fa-plane',
+      'groceries': 'fas fa-shopping-cart',
+      'income': 'fas fa-dollar-sign',
+      'salary': 'fas fa-briefcase',
+      'freelance': 'fas fa-laptop',
+      'investment': 'fas fa-chart-line',
+      'other': 'fas fa-question'
+    };
+
+    // Get category icon
+    function getCategoryIcon(category) {
+      return categoryIcons[category] || categoryIcons['other'];
+    }
+
+    // Format currency based on user's selected currency
+    function formatCurrency(amount) {
+      const config = currencyConfig[userCurrency] || currencyConfig['USD'];
+      
+      try {
+        return new Intl.NumberFormat(config.locale, {
+          style: 'currency',
+          currency: userCurrency,
+          minimumFractionDigits: userCurrency === 'JPY' || userCurrency === 'KRW' ? 0 : 2,
+          maximumFractionDigits: userCurrency === 'JPY' || userCurrency === 'KRW' ? 0 : 2
+        }).format(amount);
+      } catch (error) {
+        // Fallback to symbol-based formatting if Intl.NumberFormat fails
+        console.warn('Currency formatting failed, using fallback:', error);
+        return `${config.symbol}${amount.toLocaleString(config.locale, {
+          minimumFractionDigits: userCurrency === 'JPY' || userCurrency === 'KRW' ? 0 : 2,
+          maximumFractionDigits: userCurrency === 'JPY' || userCurrency === 'KRW' ? 0 : 2
+        })}`;
+      }
+    }
+
+    // Format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    }
+
+    // Get category color
+    function getCategoryColor(type) {
+      return type === 'expense' ? 'text-red-600' : 'text-green-600';
+    }
+
+    // Create transaction card HTML
+    function createTransactionCard(transaction) {
+      const icon = getCategoryIcon(transaction.category);
+      const amountColor = getCategoryColor(transaction.type);
+      const amountPrefix = transaction.type === 'expense' ? '-' : '+';
+      
+      return `
+        <div class="transaction-card rounded-xl overflow-hidden bg-white shadow-lg p-6 cursor-pointer">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                <i class="${icon} text-gray-600 text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 text-base">${transaction.description || 'Transaction'}</h3>
+                <p class="text-sm text-gray-500">${transaction.categoryDisplay || transaction.category}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-lg ${amountColor}">${amountPrefix}${formatCurrency(Math.abs(transaction.amount))}</p>
+              <p class="text-xs text-gray-500">${formatDate(transaction.date)}</p>
+            </div>
+          </div>
+          <div class="pt-4 border-t border-gray-100">
+            <div class="flex items-center justify-between text-xs text-gray-400">
+              <span class="capitalize">${transaction.type}</span>
+              <span>${new Date(transaction.createdAt?.toDate ? transaction.createdAt.toDate() : transaction.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Show main content
+    function showMainContent() {
+      document.getElementById('loadingIndicator').classList.add('hidden');
+      document.getElementById('mainContent').classList.remove('hidden');
+    }
+
+    // Load transactions from Firestore
+    async function loadTransactions() {
+      if (!currentUser) return;
+
+      const noTransactionsEl = document.getElementById('noTransactions');
+      const gridEl = document.getElementById('transactionsGrid');
+
+      try {
+        const transactionsRef = collection(db, 'transactions');
+        const q = query(
+          transactionsRef,
+          where('uid', '==', currentUser.uid),
+          orderBy('createdAt', sortOrder),
+          limit(6) // Show only 6 recent transactions
+        );
+
+        const querySnapshot = await getDocs(q);
+        transactions = [];
+
+        querySnapshot.forEach((doc) => {
+          transactions.push({ id: doc.id, ...doc.data() });
+        });
+
+        displayTransactions();
+      } catch (error) {
+        console.error('Error loading transactions:', error);
+        noTransactionsEl.classList.remove('hidden');
+        gridEl.classList.add('hidden');
+        
+        // Show error message
+        noTransactionsEl.innerHTML = `
+          <i class="fas fa-exclamation-triangle text-red-400 text-4xl mb-4"></i>
+          <p class="text-red-300 text-lg">Error loading transactions</p>
+          <p class="text-red-200 text-sm">Please try refreshing the page</p>
+        `;
+      }
+    }
+
+    // Display transactions
+    function displayTransactions() {
+      const noTransactionsEl = document.getElementById('noTransactions');
+      const gridEl = document.getElementById('transactionsGrid');
+
+      if (transactions.length === 0) {
+        noTransactionsEl.classList.remove('hidden');
+        gridEl.classList.add('hidden');
+      } else {
+        noTransactionsEl.classList.add('hidden');
+        gridEl.classList.remove('hidden');
+
+        gridEl.innerHTML = transactions.map(createTransactionCard).join('');
+
+        // Add click handlers to transaction cards
+        const transactionCards = gridEl.querySelectorAll('.transaction-card');
+        transactionCards.forEach((card, index) => {
+          card.addEventListener('click', () => {
+            // You can add navigation to transaction details here
+            console.log('Transaction clicked:', transactions[index]);
+            // window.location.href = `transaction-details.html?id=${transactions[index].id}`;
+          });
+        });
+      }
+    }
+
+    // Sort transactions
+    function toggleSort() {
+      sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+      const sortLabel = document.getElementById('sortLabel');
+      sortLabel.textContent = sortOrder === 'desc' ? 'Latest First' : 'Oldest First';
+      
+      // Re-sort existing transactions
+      transactions.sort((a, b) => {
+        const dateA = new Date(a.createdAt?.toDate ? a.createdAt.toDate() : a.createdAt);
+        const dateB = new Date(b.createdAt?.toDate ? b.createdAt.toDate() : b.createdAt);
+        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+      });
+      
+      displayTransactions();
+    }
+
+    // Update welcome message
+    function updateWelcomeMessage() {
+      if (userData) {
+        const welcomeUserNameEl = document.getElementById('welcomeUserName');
+        welcomeUserNameEl.textContent = userData.firstname || 'User';
+      }
+    }
+
+    // Set user currency from user data
+    function setUserCurrency() {
+      if (userData && userData.currency) {
+        userCurrency = userData.currency;
+        console.log('User currency set to:', userCurrency);
+      } else {
+        console.log('No currency found in user data, using default USD');
+        userCurrency = 'USD';
+      }
+    }
+
+    function showLogoutModal() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideLogoutModal() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    
+    // Restore body scroll
+    document.body.style.overflow = 'auto';
+  }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+
+        try {
+          const docRef = doc(db, "users", currentUser.uid);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            userData = docSnap.data();
+            document.getElementById('user-name').textContent = `${userData.firstname} ${userData.lastname}`;
+            document.getElementById("userInitials").textContent = `${userData.firstname[0] || ''}${userData.lastname[0] || ''}`.toUpperCase();
+            
+            // Set user currency before loading transactions
+            setUserCurrency();
+            
+            // Update welcome message
+            updateWelcomeMessage();
+            
+            // Load transactions after user data is loaded
+            await loadTransactions();
+            
+            // Show main content after everything is loaded
+            showMainContent();
+          } else {
+            alert("User data not found.");
+            window.location.href = "index.html";
+          }
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          window.location.href = "index.html";
+        }
+      } else {
+        // No user is signed in, redirect to login
+        window.location.href = 'index.html';
+      }
+    });
+
+    // New Transaction Button Handler
+    document.getElementById('newTransactionBtn').addEventListener('click', () => {
+      window.location.href = 'transactions2.html';
+    });
+
+    // Logout button handler - shows confirmation modal
+  document.getElementById('logoutButton').addEventListener('click', () => {
+    showLogoutModal();
+  });
+
+  // Cancel logout button handler
+  document.getElementById('cancelLogout').addEventListener('click', () => {
+    hideLogoutModal();
+  });
+
+  // Confirm logout button handler
+  document.getElementById('confirmLogout').addEventListener('click', async () => {
+    try {
+      await signOut(auth);
+      hideLogoutModal();
+      window.location.href = 'index.html';
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Failed to logout. Please try again.");
+      hideLogoutModal();
+    }
+  });
+
+  // Close modal when clicking outside of it
+  document.getElementById('logoutModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('logoutModal')) {
+      hideLogoutModal();
+    }
+  });
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !document.getElementById('logoutModal').classList.contains('hidden')) {
+      hideLogoutModal();
+    }
+  });
+
+    // Sort button handler
+    document.getElementById('sortButton').addEventListener('click', toggleSort);
+
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('opacity-0');
+      overlay.classList.toggle('pointer-events-none');
+    }
+
+    menuToggle.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+
+    // Close sidebar when clicking on navigation links on mobile
+    const navLinks = sidebar.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+          toggleSidebar();
+        }
+      });
+    });
+
+    // Close sidebar on window resize if it's open on mobile
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        sidebar.classList.remove('active');
+        overlay.classList.add('opacity-0');
+        overlay.classList.add('pointer-events-none');
+      }
+    });
+  </script>
+ </body>
+</html>

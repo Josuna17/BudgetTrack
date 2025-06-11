@@ -1,0 +1,426 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BudgetTrack Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Scrollbar for sidebar */
+    aside::-webkit-scrollbar {
+      width: 6px;
+    }
+    aside::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.1);
+      border-radius: 3px;
+    }
+  /* Mobile sidebar transition */
+    @media (max-width: 768px) {
+      .sidebar-mobile {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-mobile.active {
+        transform: translateX(0);
+      }
+      .overlay {
+        transition: opacity 0.3s ease-in-out;
+      }
+    }
+    
+    /* Modal overlay styling */
+    .modal-overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    
+    /* Modal animation */
+    .modal-content {
+      animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+  </style>
+ </head>
+ <body class="min-h-screen flex bg-gradient-to-r from-[#0a0a2a] to-[#2e3adf] text-gray-900">
+  
+  <!-- Mobile Menu Button -->
+  <div class="md:hidden fixed top-4 left-4 z-50">
+    <button id="menuToggle" class="bg-white/20 backdrop-blur-sm text-white p-3 rounded-lg shadow-lg hover:bg-white/30 transition-all">
+      <i class="fas fa-bars text-lg"></i>
+    </button>
+  </div>
+
+  <!-- Mobile Overlay -->
+  <div id="overlay" class="md:hidden fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none overlay"></div>
+
+  <!-- Logout Confirmation Modal -->
+  <div id="logoutModal" class="fixed inset-0 modal-overlay z-[100] hidden items-center justify-center">
+    <div class="modal-content fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
+      <div class="text-center">
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-6">
+          <i class="fas fa-sign-out-alt text-red-600 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Confirm Logout</h3>
+        <p class="text-gray-600 mb-8">Are you sure you want to log out of your account?</p>
+        <div class="flex gap-4 justify-center">
+          <button id="cancelLogout" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+            Cancel
+          </button>
+          <button id="confirmLogout" class="px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
+            <i class="fas fa-sign-out-alt mr-2"></i>
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar-mobile md:translate-x-0 fixed z-50 flex flex-col justify-between w-80 md:w-64 h-screen border-r border-gray-300 bg-[#d1d1d1] overflow-y-auto">
+   <div>
+    <a class="flex items-center gap-3 px-6 py-6 md:py-8 text-blue-700 font-extrabold text-xl tracking-wide hover:text-blue-800 transition" href="home2.html">
+     <i class="fas fa-file-invoice-dollar text-2xl">
+     </i>
+     <span>
+      BudgetTrack
+     </span>
+    </a>
+    <nav class="flex flex-col space-y-2 px-6">
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg hover:bg-gray-300 text-gray-700 font-medium transition" href="home2.html">
+      <i class="fas fa-home text-lg">
+      </i>
+      <span class="text-base">Home</span>
+     </a>
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg hover:bg-gray-300 text-gray-700 font-medium transition" href="dashboard2.html">
+      <i class="fas fa-th-large text-lg">
+      </i>
+      <span class="text-base">Dashboard</span>
+     </a>
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg hover:bg-gray-300 text-gray-700 font-medium transition" href="transactions2.html">
+      <i class="fas fa-user-friends text-lg">
+      </i>
+      <span class="text-base">Transactions</span>
+     </a>
+     <a class="flex items-center gap-4 px-5 py-4 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow-md shadow-blue-200 hover:bg-blue-200 transition" href="settings2.html">
+      <i class="fas fa-cog text-lg">
+      </i>
+      <span class="text-base">Settings</span>
+     </a>
+    </nav>
+   </div>
+   
+   <div class="border-t border-gray-300 mt-4">
+    <div class="flex items-center gap-4 px-6 py-6">
+     <div id="userInitials" class="w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full font-bold text-lg"></div>
+     <div>
+       <p id="user-name" class="font-semibold text-gray-900 text-base leading-tight"></p>
+       <p class="text-sm text-gray-600">Account</p>
+     </div>
+    </div>
+    <button class="w-full flex items-center gap-3 px-6 py-4 text-gray-700 font-semibold hover:bg-gray-300 border-t border-gray-300 transition" id="logoutButton" type="button">
+     <i class="fas fa-sign-out-alt text-lg">
+     </i>
+     <span class="text-base">Log Out</span>
+    </button>
+   </div>
+  </aside>
+
+  <main class="flex-1 ml-0 md:ml-64 p-6 md:p-10 overflow-y-auto">
+    <div class="pt-16 md:pt-0">
+     <h1 class="text-white font-semibold text-2xl md:text-3xl mb-8 md:mb-10 select-none">
+      Settings
+     </h1>
+
+    <!-- Loading indicator -->
+    <div id="loadingIndicator" class="text-white text-center py-8">
+      <i class="fas fa-spinner fa-spin text-3xl"></i>
+      <p class="mt-3">Loading settings...</p>
+    </div>
+
+    <!-- Settings -->
+   <div id="settingsContent" class="mt-12 max-w-4xl mx-auto rounded-2xl bg-white p-6 hidden">
+      <div class="border border-gray-600 rounded-2xl relative">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-center text-blue-600 text-sm" style="font-family: Arial, sans-serif;">
+          Personal Information
+        </div>
+        <div class="pt-10 px-8 pb-6 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+          <div class="flex flex-col items-center col-span-1 md:col-span-2">
+            <div id="profileInitials" class="w-20 h-20 bg-blue-600 text-white flex items-center justify-center rounded-full font-bold text-2xl mb-4"></div>
+          </div>
+          <div>
+            <label class="block text-xs mb-1" for="firstName" style="font-family: Arial, sans-serif;">
+              First Name
+            </label>
+            <input class="w-full border border-gray-600 rounded px-2 py-1 text-sm" id="firstName" type="text" value=""/>
+          </div>
+          <div>
+            <label class="block text-xs mb-1" for="lastName" style="font-family: Arial, sans-serif;">
+              Last Name
+            </label>
+            <input class="w-full border border-gray-600 rounded px-2 py-1 text-sm" id="lastName" type="text" value=""/>
+          </div>
+          <div>
+            <label class="block text-xs mb-1" for="contact" style="font-family: Arial, sans-serif;">
+              Contact Number
+            </label>
+            <input class="w-full border border-gray-600 rounded px-2 py-1 text-sm" id="contact" type="text" value=""/>
+          </div>
+          <div>
+            <label class="block text-xs mb-1" for="currency" style="font-family: Arial, sans-serif;">
+              Currency
+            </label>
+            <select class="w-full border border-gray-600 rounded px-2 py-1 text-sm" id="currency">
+              <option value="USD">USD - US Dollar</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="PHP">PHP - Philippine Peso</option>
+              <option value="GBP">GBP - British Pound</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="INR">INR - Indian Rupee</option>
+              <option value="CNY">CNY - Chinese Yuan</option>
+              <option value="KRW">KRW - South Korean Won</option>
+              <option value="SGD">SGD - Singapore Dollar</option>
+              <option value="THB">THB - Thai Baht</option>
+              <option value="MXN">MXN - Mexican Peso</option>
+              <option value="BRL">BRL - Brazilian Real</option>
+            </select>
+          </div>
+          <div class="flex justify-end col-span-1 md:col-span-2">
+            <button class="bg-blue-600 text-white text-sm rounded-md px-4 py-2 hover:bg-blue-700 transition" id="saveChangesBtn" type="button">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBk-dE1Hk-yg6sU1uilShADBohUDPlOg2o",
+    authDomain: "budget-tracker-14.firebaseapp.com",
+    projectId: "budget-tracker-14",
+    storageBucket: "budget-tracker-14.appspot.com",
+    messagingSenderId: "213270821410",
+    appId: "1:213270821410:web:74011269ee05d2e72e687b",
+    measurementId: "G-SDLEBN6QBG"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  let currentUser = null;
+  let userData = null;
+
+  function updateProfileInitials(firstName, lastName) {
+    const initials = `${firstName[0] || ''}${lastName[0] || ''}`.toUpperCase();
+    document.getElementById('profileInitials').textContent = initials;
+    document.getElementById('userInitials').textContent = initials;
+  }
+
+  function hideLoadingShowContent() {
+    document.getElementById('loadingIndicator').style.display = 'none';
+    document.getElementById('settingsContent').classList.remove('hidden');
+  }
+
+  function showLogoutModal() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideLogoutModal() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    
+    // Restore body scroll
+    document.body.style.overflow = 'auto';
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser = user;
+
+      try {
+        const docRef = doc(db, "users", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          userData = docSnap.data();
+          
+          // Update sidebar user info
+          document.getElementById('user-name').textContent = `${userData.firstname} ${userData.lastname}`;
+          updateProfileInitials(userData.firstname, userData.lastname);
+          
+          // Populate form fields with user data
+          document.getElementById('firstName').value = userData.firstname || '';
+          document.getElementById('lastName').value = userData.lastname || '';
+          document.getElementById('contact').value = userData.contact || '';
+          document.getElementById('currency').value = userData.currency || 'PHP';
+          
+          // Hide loading and show content
+          hideLoadingShowContent();
+          
+        } else {
+          alert("User data not found.");
+          window.location.href = "index.html";
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        alert("Failed to load user data. Please try again.");
+      }
+    } else {
+      // User is not authenticated, redirect to login
+      window.location.href = "index.html";
+    }
+  });
+
+  // Logout button handler - shows confirmation modal
+  document.getElementById('logoutButton').addEventListener('click', () => {
+    showLogoutModal();
+  });
+
+  // Cancel logout button handler
+  document.getElementById('cancelLogout').addEventListener('click', () => {
+    hideLogoutModal();
+  });
+
+  // Confirm logout button handler
+  document.getElementById('confirmLogout').addEventListener('click', async () => {
+    try {
+      await signOut(auth);
+      hideLogoutModal();
+      window.location.href = 'index.html';
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Failed to logout. Please try again.");
+      hideLogoutModal();
+    }
+  });
+
+  // Close modal when clicking outside of it
+  document.getElementById('logoutModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('logoutModal')) {
+      hideLogoutModal();
+    }
+  });
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !document.getElementById('logoutModal').classList.contains('hidden')) {
+      hideLogoutModal();
+    }
+  });
+
+  // Save changes handler
+  document.getElementById('saveChangesBtn').addEventListener('click', async () => {
+    if (!currentUser) {
+      alert("User not authenticated.");
+      return;
+    }
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const currency = document.getElementById('currency').value;
+
+    if (!firstName || !lastName) {
+      alert("Please fill in all required fields (First Name, Last Name).");
+      return;
+    }
+
+    try {
+      const docRef = doc(db, "users", currentUser.uid);
+      await updateDoc(docRef, {
+        firstname: firstName,
+        lastname: lastName,
+        contact: contact,
+        currency: currency
+      });
+
+      // Update local userData and UI
+      userData = {
+        ...userData,
+        firstname: firstName,
+        lastname: lastName,
+        contact: contact,
+        currency: currency
+      };
+
+      // Update sidebar display and profile initials
+      document.getElementById('user-name').textContent = `${firstName} ${lastName}`;
+      updateProfileInitials(firstName, lastName);
+
+      alert("Changes saved successfully!");
+    } catch (error) {
+      console.error("Failed to save changes:", error);
+      alert("Failed to save changes. Please try again.");
+    }
+  });
+
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  function toggleSidebar() {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('opacity-0');
+    overlay.classList.toggle('pointer-events-none');
+  }
+
+  menuToggle.addEventListener('click', toggleSidebar);
+  overlay.addEventListener('click', toggleSidebar);
+
+  // Close sidebar when clicking on navigation links on mobile
+  const navLinks = sidebar.querySelectorAll('nav a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth < 768) {
+        toggleSidebar();
+      }
+    });
+  });
+
+  // Close sidebar on window resize if it's open on mobile
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) {
+      sidebar.classList.remove('active');
+      overlay.classList.add('opacity-0');
+      overlay.classList.add('pointer-events-none');
+    }
+  });
+  </script>
+</body>
+</html>
