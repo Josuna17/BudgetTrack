@@ -16,9 +16,43 @@
     body {
       font-family: 'Inter', sans-serif;
     }
+    @keyframes blob {
+      0%, 100% {
+        transform: translate(0px, 0px) scale(1);
+      }
+      33% {
+        transform: translate(30px, -50px) scale(1.1);
+      }
+      66% {
+        transform: translate(-20px, 20px) scale(0.9);
+      }
+    }
+    .animate-blob {
+      animation: blob 7s infinite;
+    }
+    .animation-delay-2000 {
+      animation-delay: 2s;
+    }
+    .animation-delay-4000 {
+      animation-delay: 4s;
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+    .toast-enter { animation: slideInRight 0.3s ease-out; }
+    .toast-exit { animation: slideOutRight 0.3s ease-in; }
   </style>
 </head>
 <body class="flex items-center justify-center p-6 bg-gradient-to-r from-[#0a0a2a] to-[#2e3adf] min-h-screen">
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
   <div class="relative max-w-md w-full bg-white bg-opacity-90 rounded-2xl shadow-2xl p-8 sm:p-10 overflow-hidden">
     <!-- Background decorative circles -->
     <div aria-hidden="true" class="absolute -top-16 -left-16 w-48 h-48 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
@@ -68,9 +102,11 @@
 
       <button
         type="submit"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 rounded-lg shadow-lg transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500"
+        id="login-btn"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 rounded-lg shadow-lg transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
-        Login
+        <span id="btn-text">Login</span>
+        <i id="btn-spinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
       </button>
 
       <p class="mt-8 text-center text-gray-700 text-sm select-none">
@@ -79,29 +115,6 @@
       </p>
     </form>
   </div>
-
-  <style>
-    @keyframes blob {
-      0%, 100% {
-        transform: translate(0px, 0px) scale(1);
-      }
-      33% {
-        transform: translate(30px, -50px) scale(1.1);
-      }
-      66% {
-        transform: translate(-20px, 20px) scale(0.9);
-      }
-    }
-    .animate-blob {
-      animation: blob 7s infinite;
-    }
-    .animation-delay-2000 {
-      animation-delay: 2s;
-    }
-    .animation-delay-4000 {
-      animation-delay: 4s;
-    }
-  </style>
 
   <!-- Add this inside your <script type="module"> block -->
 <script type="module">
@@ -123,13 +136,96 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  // Toast notification function
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    const toastId = 'toast-' + Date.now();
+    toast.id = toastId;
+    
+    // Set colors based on type
+    let bgColor, textColor, icon;
+    switch(type) {
+      case 'success':
+        bgColor = 'bg-green-500';
+        textColor = 'text-white';
+        icon = '<i class="fas fa-check-circle mr-2"></i>';
+        break;
+      case 'error':
+        bgColor = 'bg-red-500';
+        textColor = 'text-white';
+        icon = '<i class="fas fa-exclamation-circle mr-2"></i>';
+        break;
+      case 'warning':
+        bgColor = 'bg-yellow-500';
+        textColor = 'text-white';
+        icon = '<i class="fas fa-exclamation-triangle mr-2"></i>';
+        break;
+      default:
+        bgColor = 'bg-blue-500';
+        textColor = 'text-white';
+        icon = '<i class="fas fa-info-circle mr-2"></i>';
+    }
+    
+    toast.className = `${bgColor} ${textColor} px-6 py-4 rounded-lg shadow-lg max-w-sm toast-enter flex items-center`;
+    toast.innerHTML = `
+      ${icon}
+      <span class="flex-1">${message}</span>
+      <button onclick="closeToast('${toastId}')" class="ml-4 hover:opacity-70">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+    
+    document.getElementById('toast-container').appendChild(toast);
+    
+    // Auto-close after 5 seconds
+    setTimeout(() => {
+      closeToast(toastId);
+    }, 5000);
+  }
+
+  // Close toast function
+  window.closeToast = function(toastId) {
+    const toast = document.getElementById(toastId);
+    if (toast) {
+      toast.classList.remove('toast-enter');
+      toast.classList.add('toast-exit');
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }
+  }
+
   const loginForm = document.getElementById("loginForm");
+  const loginBtn = document.getElementById("login-btn");
+  const btnText = document.getElementById("btn-text");
+  const btnSpinner = document.getElementById("btn-spinner");
+
+  // Function to set loading state
+  function setLoadingState(isLoading) {
+    if (isLoading) {
+      loginBtn.disabled = true;
+      btnText.textContent = "Logging in...";
+      btnSpinner.classList.remove("hidden");
+    } else {
+      loginBtn.disabled = false;
+      btnText.textContent = "Login";
+      btnSpinner.classList.add("hidden");
+    }
+  }
 
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+      showToast("Please enter both email and password.", 'warning');
+      return;
+    }
+
+    // Set loading state
+    setLoadingState(true);
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -144,14 +240,33 @@
         const userData = docSnap.data();
         console.log("User data:", userData);
 
-        alert("Login successful!");
-        window.location.href = "home2.html";
+        showToast("Login successful! Redirecting to dashboard...", 'success');
+        
+        // Redirect after showing success message
+        setTimeout(() => {
+          window.location.href = "home2.html";
+        }, 2000);
       } else {
-        alert("No user data found in Firestore.");
+        showToast("No user data found. Please contact support.", 'error');
+        setLoadingState(false);
       }
     } catch (error) {
       console.error("Login error:", error.message);
-      alert("Login failed: " + error.message);
+      
+      // Show more user-friendly error messages
+      let errorMessage = "Login failed. Please try again.";
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = "No account found with this email address.";
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = "Incorrect password. Please try again.";
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = "Please enter a valid email address.";
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = "Too many failed attempts. Please try again later.";
+      }
+      
+      showToast(errorMessage, 'error');
+      setLoadingState(false);
     }
   });
 
